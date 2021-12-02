@@ -20,9 +20,7 @@
           <li><a href="/news">News</a></li>
           <li><a href="/contact">Contact</a></li>
         </ul>
-        <p>
-          Time of Login : <%= Time.now.to_formatted_s(:short) %>
-        </p>
+        
       </nav>
       <main class='<%= controller.controller_name %>'>
         <%= yield %>
