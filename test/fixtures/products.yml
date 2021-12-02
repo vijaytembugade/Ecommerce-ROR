@@ -2,12 +2,18 @@
 
 one:
   title: MyString
-  description: 
-  image_url: MyString
+  description: MyText
+  image_url: one.jpg
   price: 9.99
 
 two:
   title: MyString
-  description: 
-  image_url: MyString
+  description: Mytext
+  image_url: two.jpg
   price: 9.99
+
+ruby:
+  title: Programming Language
+  description: One of the easiest langauge ever
+  image_url : ruby.jpg
+  price: 9.63
