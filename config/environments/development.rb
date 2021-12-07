@@ -10,6 +10,8 @@ Rails.application.configure do
     password: "secret",
     enable_starttls_auto: true,
   }
+
+  config.active_storage.service = :local
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on
