@@ -7,6 +7,7 @@ class Order < ApplicationRecord
          "Check" => 0,
          "Credit card" => 1,
          "Purchase order" => 2,
+         "PayPal" => 3,
        }
   validates :pay_type, inclusion: pay_types.keys
 
@@ -15,6 +16,10 @@ class Order < ApplicationRecord
       item.cart_id = nil
       line_items << item
     end
+  end
+
+  def total_price(cart)
+    cart.line_items.to_a.sum { |item| item.total_price }
   end
 
   def charge!(pay_type_params)
@@ -34,6 +39,10 @@ class Order < ApplicationRecord
     when "Purchase order"
       payment_method = :po
       payment_details[:po_num] = pay_type_params[:po_number]
+    when "PayPal"
+      payment_method = :paypal
+      puts "payment done"
+      payment_details = "paypal"
     end
     payment_result = Pago.make_payment(
       order_id: id,

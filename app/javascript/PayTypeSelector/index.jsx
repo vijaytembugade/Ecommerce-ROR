@@ -3,6 +3,7 @@ import NoPayType from "./NoPayType";
 import CreditCardPayType from "./CreditCardPayType";
 import CheckPayType from "./CheckPayType";
 import PurchaseOrderPayType from "./PurchaseOrderPayType";
+import PayPal, {addPayPalScript} from "./PayPal";
 
 class PayTypeSelector extends React.Component {
   constructor(props) {
@@ -21,6 +22,9 @@ class PayTypeSelector extends React.Component {
       PayTypeCustomComponent = CheckPayType;
     } else if (this.state.selectedPayType == "Purchase order") {
       PayTypeCustomComponent = PurchaseOrderPayType;
+    }else if (this.state.selectedPayType == "PayPal") {
+      PayTypeCustomComponent = PayPal;
+      addPayPalScript()
     }
     return (
       <div>
@@ -35,9 +39,11 @@ class PayTypeSelector extends React.Component {
             <option value="Check">Check</option>
             <option value="Credit card">Credit card</option>
             <option value="Purchase order">Purchase order</option>
+            <option value="PayPal">PayPal</option>
           </select>
+          
         </div>
-        <PayTypeCustomComponent />
+        <PayTypeCustomComponent price={this.props.price}/>
       </div>
     );
   }

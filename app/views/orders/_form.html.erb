@@ -22,6 +22,10 @@
     <%= form.email_field :email, size: 40 %>
   </div>
   <div id='pay-type-component'></div>
+  <h4>
+    Total Amount : 
+    <h2 >Rs. <span id="total_order_amount"><%= @total_price %></span> </h2>
+  </h4>
   <div class="actions">
     <%= form.submit 'Place Order'%>
   </div>

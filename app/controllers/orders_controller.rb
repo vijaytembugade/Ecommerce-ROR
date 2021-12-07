@@ -5,6 +5,10 @@ class OrdersController < ApplicationController
   before_action :ensure_cart_isnt_empty, only: :new
   before_action :set_order, only: %i[ show edit update destroy ]
 
+  # @total_price = total_price(@cart)
+  # puts total_price
+  # puts "Vijay" * 100
+
   # GET /orders or /orders.json
   def index
     @orders = Order.all
@@ -17,6 +21,7 @@ class OrdersController < ApplicationController
   # GET /orders/new
   def new
     @order = Order.new
+    @total_price = @order.total_price(@cart)
   end
 
   # GET /orders/1/edit
@@ -26,15 +31,15 @@ class OrdersController < ApplicationController
   # POST /orders or /orders.json
   def create
     @order = Order.new(order_params)
-    puts @cart
     @order.add_line_items_from_cart(@cart)
 
     respond_to do |format|
       if @order.save
         Cart.destroy(session[:cart_id])
         session[:cart_id] = nil
-        # OrderMailer.received(@order).deliver_later
+        # OrderMailer.received(total_order_price@order).deliver_later
         ChargeOrderJob.perform_later(@order, pay_type_params.to_h)
+        puts pay_type_params.to_h
         format.html { redirect_to store_index_url, notice: "Thank you for your order." }
         format.json { render :show, status: :created, location: @order }
       else
@@ -73,6 +78,8 @@ class OrdersController < ApplicationController
       params.require(:order).permit(:routing_number, :account_number)
     elsif order_params[:pay_type] == "Purchase order"
       params.require(:order).permit(:po_number)
+    elsif order_params[:pay_type] == "PayPal"
+      params.require(:order).permit(:paypal_id, :name)
     else
       {}
     end
