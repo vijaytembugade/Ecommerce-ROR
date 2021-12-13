@@ -1,22 +1,39 @@
 <% if notice %>
   <aside id="notice"><%= notice %></aside>
 <% end %>
+<%= form_tag do %>
+  <div class="field">
+    <%= label_tag :search, 'Search:' %>
+    <%= text_field_tag :search, params[:search] %>
+  </div>
+  <%= button_to 'Search', search_path %>
+<% end %>
+<div>
+  <div class="dropdown">
+    <button class="dropbtn">Categories</button>
+    <div class="dropdown-content">
+      <% @categories.each do |category| %>
+        <p><%= link_to "#{category}",  search_path(category: category), method: :post %></p>
+      <%end %>
+    </div>
+  </div>
+</div>
 <h1>All Products</h1>
 <ul class="catalog">
   <% cache @products do %>
     <% @products.each do |product| %>
-        <li>
-          <%= image_tag(product.image_url) %>
-          <h2><%= product.title %></h2>
-          <p>
-            <%= sanitize(product.description) %>
-          </p>
-          <div class="price">
-              <%= number_to_indian_currency(product.price) %>
-            <br/>
-            <%= button_to 'Add to Cart' , line_items_path(product_id: product) , remote: true%>
-          </div>
-        </li>
+      <li>
+        <%= image_tag(product.image_url) %>
+        <h2><%= product.title %></h2>
+        <p>
+          <%= sanitize(product.description) %>
+        </p>
+        <div class="price">
+          <%= number_to_indian_currency(product.price) %>
+          <br/>
+          <%= button_to 'Add to Cart' , line_items_path(product_id: product) , remote: true%>
+        </div>
+      </li>
     <% end %>
   <% end %>
 </ul>

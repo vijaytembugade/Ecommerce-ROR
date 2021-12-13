@@ -4,9 +4,7 @@ const PayPal = ({ price }) => {
   const [showButton, setButton] = useState(true);
   const [paymentDetails, setPaymentDetails] = useState();
 
-  useEffect(() => {
-    console.log(paymentDetails);
-  }, [showButton]);
+ 
   return (
     <>
       {showButton && (

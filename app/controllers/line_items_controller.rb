@@ -1,7 +1,7 @@
 class LineItemsController < ApplicationController
   include CurrentCart
   before_action :set_cart, only: [:create, :update]
-  skip_before_action :authorize, only: :create
+  skip_before_action :authorize, only: [:create, :update]
   before_action :set_line_item, only: %i[ show edit update destroy ]
 
   # GET /line_items or /line_items.json
@@ -44,12 +44,14 @@ class LineItemsController < ApplicationController
     # product = Product.find(params[:product_id])
     @line_item = LineItem.find(params[:id])
 
-    @line_item.quantity -= 1 if @line_item.quantity > 1
+    if params.has_key?(:quantity)
+      @line_item.quantity -= 1 if @line_item.quantity > 1
+    end
 
     # @line_item.quantity -= 1
 
     respond_to do |format|
-      if @line_item.save
+      if @line_item.save!
         format.html { redirect_to store_index_url, notice: "Cart is successfully updated." }
         format.json { render :show, status: :ok, location: @line_item }
         format.js { @current_item = @line_item }
